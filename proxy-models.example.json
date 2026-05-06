@@ -1,5 +1,22 @@
 {
   "_comment": "Example model catalog for codex-bridge. Copy to ~/.codex/proxy-models.json (or any path) and point both Codex (config.toml -> model_catalog_json) and codex-bridge (.env -> MODEL_CATALOG_PATH) at it. The proxy infers the upstream provider from each slug prefix (deepseek-* / mimo-* / gpt-*).",
+
+  "_field_reference": {
+    "slug":                          "Model identifier sent by Codex CLI. The proxy uses the prefix (deepseek-* / mimo-* / gpt-*) to route to the correct upstream provider.",
+    "display_name":                  "Human-readable name shown in the Codex CLI model picker.",
+    "supported_reasoning_levels":    "Array of { effort, description } objects. 'effort' is one of: none | minimal | low | medium | high | xhigh. Codex maps the user's reasoning-effort slider to these values; the proxy then translates them to each provider's native format (see README → Reasoning Effort Translation).",
+    "shell_type":                    "Shell environment for Codex CLI sandbox. 'default' uses the system shell.",
+    "visibility":                    "'list' = shown in model picker; 'hidden' = available but not listed.",
+    "supported_in_api":              "true = the model can be called via the API. Set false to list-only (informational).",
+    "priority":                      "Sort order in the model picker. Lower number = higher priority (shown first).",
+    "base_instructions":             "Optional system-prompt prefix injected by Codex for this model. Leave empty for default behavior.",
+    "supports_reasoning_summaries":  "Whether the model returns summarized reasoning steps (currently only some OpenAI models).",
+    "support_verbosity":             "Whether Codex should send verbosity hints to this model.",
+    "truncation_policy":             "Context-window truncation strategy. 'mode' is 'tokens'; 'limit' is the max token count before Codex truncates older messages.",
+    "supports_parallel_tool_calls":  "true = Codex may issue multiple tool calls in a single turn for this model.",
+    "experimental_supported_tools":  "Array of experimental tool identifiers this model opts into. Usually empty."
+  },
+
   "models": [
     {
       "slug": "mimo-v2.5-pro",
