@@ -12,9 +12,18 @@
   <img src="https://img.shields.io/badge/dependencies-0-brightgreen" alt="Zero Dependencies">
 </p>
 
+<p align="center">
+  <strong>English</strong> ·
+  <a href="./README.zh-CN.md">简体中文</a> ·
+  <a href="./README.ja.md">日本語</a> ·
+  <a href="./README.ko.md">한국어</a> ·
+  <a href="./README.es.md">Español</a>
+</p>
+
 ---
 
-Codex CLI speaks the **OpenAI Responses API**. DeepSeek and MiMo speak **Chat Completions**. This proxy translates between them in both directions — including streaming SSE, tool calls, and thinking-mode round-trips — so you can use any supported model inside Codex without patching the client.
+Codex CLI speaks the **OpenAI Responses API**. DeepSeek and MiMo speak **Chat Completions**.
+codex-bridge translates between them in both directions — streaming SSE, tool calls, and thinking-mode round-trips — so you can use any supported model inside Codex without patching the client.
 
 ## Features
 
@@ -48,15 +57,10 @@ DEEPSEEK_API_KEY=sk-...                                  # from platform.deepsee
 ### 2. Start the proxy
 
 ```bash
-# Node 20+ (reads .env natively):
 node --env-file=.env proxy.mjs
-
-# Node 18–19:
-set -a && source .env && set +a && node proxy.mjs
-
-# Background:
-nohup node --env-file=.env proxy.mjs > /tmp/codex-proxy.log 2>&1 &
 ```
+
+> Need Node 18–19 or background mode? See [Advanced Usage](#advanced-usage).
 
 ### 3. Point Codex CLI at the proxy
 
@@ -86,7 +90,7 @@ Run `codex` — done.
 
 ```
 ┌─────────────┐    Responses API    ┌──────────────┐
-│  Codex CLI  │────────────────────▶│  codex-proxy │
+│  Codex CLI  │────────────────────▶│ codex-bridge │
 │             │  Authorization:     │    :4000     │
 └─────────────┘  Bearer <key>       └──────┬───────┘
                                            │  model-based routing
@@ -191,6 +195,14 @@ Runs 30 checks covering endpoints, input shapes, auth gate, streaming completion
 
 ## Advanced Usage
 
+- **Node 18–19 startup** — `--env-file` was added in Node 20. On older versions:
+  ```bash
+  set -a && source .env && set +a && node proxy.mjs
+  ```
+- **Background mode**:
+  ```bash
+  nohup node --env-file=.env proxy.mjs > /tmp/codex-bridge.log 2>&1 &
+  ```
 - **Multi-key provider locking** — assign each inbound key to a specific provider for multi-profile setups. See `env.example` for the `PROXY_KEYS` format.
 - **Model catalog single source of truth** — point `MODEL_CATALOG_PATH` at the same JSON file Codex uses (`model_catalog_json` in `config.toml`) to keep model lists in sync automatically.
 
@@ -202,4 +214,4 @@ Runs 30 checks covering endpoints, input shapes, auth gate, streaming completion
 
 ## License
 
-MIT
+MIT — see [LICENSE](./LICENSE).
